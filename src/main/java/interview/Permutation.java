@@ -26,11 +26,10 @@ public class Permutation {
             System.out.println(searched);
             return;
         }
-        ArrayList<Integer> rawArray = new ArrayList<>(arr);
-        ArrayList<Integer> rawSearched = new ArrayList<>(searched);
-        for (int i = 0; i < rawArray.size(); i++) {
-            ArrayList<Integer> accessArray = new ArrayList<>(rawArray);
-            ArrayList<Integer> accessSearched = new ArrayList<>(rawSearched);
+
+        for (int i = 0; i < arr.size(); i++) {
+            ArrayList<Integer> accessArray = new ArrayList<>(arr);
+            ArrayList<Integer> accessSearched = new ArrayList<>(searched);
             accessSearched.add(accessArray.get(i));
             accessArray.remove(i);
             showAllPossibleOrder(accessArray, accessSearched);
