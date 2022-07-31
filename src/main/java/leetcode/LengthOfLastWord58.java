@@ -1,5 +1,7 @@
 package leetcode;
 
+import java.util.stream.Stream;
+
 public class LengthOfLastWord58 {
     static class Solution {
         public int lengthOfLastWord(String s) {
@@ -52,13 +54,7 @@ public class LengthOfLastWord58 {
             // A more JAVAish solution
             s = s.trim();
 
-            int lastSpace = s.lastIndexOf(" ");
-
-            if (lastSpace == -1) {
-                return s.length();
-            }
-
-            return s.length() - lastSpace - 1;
+            return s.length() - s.lastIndexOf(" ") - 1;
         }
     }
 }
