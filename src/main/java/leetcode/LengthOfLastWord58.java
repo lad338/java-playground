@@ -23,4 +23,27 @@ public class LengthOfLastWord58 {
             return result;
         }
     }
+
+    static class ReverseSolution {
+        public int lengthOfLastWord(String s) {
+            boolean isWord = Character.isAlphabetic(s.charAt(s.length() - 1));
+            int result = isWord? 1 : 0;
+            for (int i = 1; i < s.length(); i++) {
+                char current = s.charAt(s.length() - 1 - i);
+                if (Character.isAlphabetic(current)) {
+                    if (isWord) {
+                        result ++;
+                    } else {
+                        result = 1;
+                        isWord = true;
+                    }
+                } else {
+                    if (isWord) {
+                        return result;
+                    }
+                }
+            }
+            return result;
+        }
+    }
 }
