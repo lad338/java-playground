@@ -46,4 +46,19 @@ public class LengthOfLastWord58 {
             return result;
         }
     }
+
+    static class JavaSolution {
+        public int lengthOfLastWord(String s) {
+            // A more JAVAish solution
+            s = s.trim();
+
+            int lastSpace = s.lastIndexOf(" ");
+
+            if (lastSpace == -1) {
+                return s.length();
+            }
+
+            return s.length() - lastSpace - 1;
+        }
+    }
 }
