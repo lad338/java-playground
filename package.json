@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "prettier": "prettier --plugin=./node_modules/prettier-plugin-java --config .prettierrc.json --check 'src/**/*.java'",
+    "prettier-fix": "prettier --write --plugin=./node_modules/prettier-plugin-java --config .prettierrc.json --check 'src/**/*.java'"
+  },
+  "devDependencies": {
+    "prettier": "2.7.1",
+    "prettier-plugin-java": "^1.6.2"
+  }
+}
