@@ -33,15 +33,12 @@ public class DynamicArray {
       List<Integer> result = new ArrayList<>();
       Map<Integer, List<Integer>> arr = new HashMap<>();
 
-      List<Integer> baseList = new ArrayList<>();
-      baseList.add(queries.get(0).get(1));
-      arr.put(0, baseList);
-
       int lastAnswer = 0;
 
-      for (int i = 1; i <= queries.get(0).get(1); i++) {
-        List<Integer> currentQ = queries.get(i);
-        int idx = (currentQ.get(1) ^ lastAnswer) % n;
+      for (List<Integer> currentQ : queries) {
+        int x = currentQ.get(1);
+        int xor = x ^ lastAnswer;
+        int idx = xor % n;
         int y = currentQ.get(2);
         if (currentQ.get(0) == 1) {
           List<Integer> list = arr.get(idx);
@@ -57,6 +54,19 @@ public class DynamicArray {
         }
       }
       return result;
+    }
+
+    public static void main(String[] args) {
+      List<List<Integer>> list = new ArrayList<>() {
+        {
+          add(Arrays.asList(1, 0, 5));
+          add(Arrays.asList(1, 1, 7));
+          add(Arrays.asList(1, 0, 3));
+          add(Arrays.asList(2, 1, 0));
+          add(Arrays.asList(2, 1, 1));
+        }
+      };
+      System.out.println(dynamicArray(2, list));
     }
   }
 
