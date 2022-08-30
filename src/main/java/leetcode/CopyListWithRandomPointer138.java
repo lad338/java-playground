@@ -57,4 +57,27 @@ public class CopyListWithRandomPointer138 {
             }
         }
     }
+
+    class SingleRecursiveSolution {
+
+        Map<Node, Node> map = new HashMap<>();
+
+        public Node copyRandomList(Node head) {
+            if (head == null) {
+                return null;
+            }
+
+            if (map.get(head) != null) {
+                return map.get(head);
+            }
+
+            Node newListNode = new Node(head.val);
+            map.put(head, newListNode);
+
+            newListNode.next = copyRandomList(head.next);
+            newListNode.random = copyRandomList(head.random);
+
+            return newListNode;
+        }
+    }
 }
