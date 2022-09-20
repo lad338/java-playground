@@ -110,3 +110,4 @@ cwallet.sso.lck
 .idea/
 out/
 *.iml
+node_modules/*
