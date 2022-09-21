@@ -1,6 +1,7 @@
 package leetcode;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,15 +10,7 @@ public class GenerateParentheses22 {
     class Solution {
 
         public List<String> generateParenthesis(int n) {
-            return generateParenthesis(
-                new ArrayList<>() {
-                    {
-                        add("");
-                    }
-                },
-                n,
-                0
-            );
+            return generateParenthesis(Collections.singletonList(""), n, 0);
         }
 
         public List<String> generateParenthesis(
@@ -29,27 +22,37 @@ public class GenerateParentheses22 {
                 return generated;
             }
 
-            List<String> closingList = new ArrayList<>();
-            List<String> openingList = new ArrayList<>();
             List<String> resultList = new ArrayList<>();
 
             if (opened > 0) {
-                closingList =
-                    generated.stream().map(it -> it.concat(")")).toList();
+                final List<String> closingList = generated
+                    .stream()
+                    .map(it -> it.concat(")"))
+                    .toList();
 
-                closingList = generateParenthesis(closingList, n, opened - 1);
+                final List<String> closedList = generateParenthesis(
+                    closingList,
+                    n,
+                    opened - 1
+                );
+
+                resultList.addAll(closedList);
             }
 
             if (n > 0) {
-                openingList =
-                    generated.stream().map(it -> it.concat("(")).toList();
+                final List<String> openingList = generated
+                    .stream()
+                    .map(it -> it.concat("("))
+                    .toList();
 
-                openingList =
-                    generateParenthesis(openingList, n - 1, opened + 1);
+                final List<String> openedList = generateParenthesis(
+                    openingList,
+                    n - 1,
+                    opened + 1
+                );
+
+                resultList.addAll(openedList);
             }
-
-            resultList.addAll(closingList);
-            resultList.addAll(openingList);
 
             return resultList;
         }
