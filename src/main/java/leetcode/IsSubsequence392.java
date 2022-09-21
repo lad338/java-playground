@@ -23,4 +23,23 @@ public class IsSubsequence392 {
             return false;
         }
     }
+
+    class RecursiveSolution {
+
+        public boolean isSubsequence(String s, String t) {
+            if (s.length() == 0) {
+                return true;
+            }
+
+            if (s.length() == 1) {
+                return t.contains(s);
+            }
+
+            int index = t.indexOf(s.charAt(0));
+            if (index < 0) {
+                return false;
+            }
+            return isSubsequence(s.substring(1), t.substring(index + 1));
+        }
+    }
 }
