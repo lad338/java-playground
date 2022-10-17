@@ -1,6 +1,6 @@
-package leetcode;
+package leetcode.dp;
 
-public class MaximumArray53 {
+public class MaximumSubarray53 {
 
     class Solution {
 
