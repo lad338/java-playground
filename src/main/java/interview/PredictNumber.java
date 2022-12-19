@@ -41,8 +41,30 @@ public class PredictNumber {
     }
 
     public static void main (String[] args) {
-        for (int i = 0; i < 10; i++) {
-            System.out.println(predictNumber(i));
+        String numberRef = predictNumber(15);
+        for (int i = 0; i < 1000; i++) {
+            int predicted = predictDigit(i);
+            int correct = Integer.parseInt("" +numberRef.charAt(i));
+
+            if ( correct == predicted ) {
+                System.out.println(i +" th digit is correct as " + correct );
+            } else {
+                System.out.println(i +" th digit is wrong, correct: " + correct + ", wrong: " + predicted);
+            }
         }
     }
+
+    public static int recursiveAdd(int n) {
+        if (n == 0) return 0;
+
+        int pow2Ceil = (int)Math.ceil(Math.log(n)/Math.log(2));
+        if (n == Math.pow(2, pow2Ceil)) return 1;
+
+        return 1 + predictDigit(n - (int)Math.pow(2, pow2Ceil - 1 ));
+    }
+
+    public static int predictDigit(int n) {
+        return recursiveAdd(n) % 3;
+    }
+
 }
