@@ -54,17 +54,13 @@ public class PredictNumber {
         }
     }
 
-    public static int recursiveAdd(int n) {
+    public static int predictDigit(int n) {
         if (n == 0) return 0;
 
         int pow2Ceil = (int)Math.ceil(Math.log(n)/Math.log(2));
         if (n == Math.pow(2, pow2Ceil)) return 1;
 
-        return 1 + predictDigit(n - (int)Math.pow(2, pow2Ceil - 1 ));
-    }
-
-    public static int predictDigit(int n) {
-        return recursiveAdd(n) % 3;
+        return (1 + predictDigit(n - (int)Math.pow(2, pow2Ceil - 1 ))) % 3;
     }
 
 }
