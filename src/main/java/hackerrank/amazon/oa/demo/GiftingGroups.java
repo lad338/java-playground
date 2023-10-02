@@ -71,9 +71,7 @@ class Result {
         );
 
         for (Integer i : searched) {
-            if (toSearch.contains(i)) {
-                toSearch.remove(i);
-            }
+            toSearch.remove(i);
         }
 
         for (Integer i : toSearch) {
