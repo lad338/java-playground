@@ -1,5 +1,9 @@
 package leetcode.dp;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 public class MaximumProductSubarray152 {
 
     class Solution {
@@ -74,6 +78,24 @@ public class MaximumProductSubarray152 {
                 max = Math.max(max, Math.max(l, r));
             }
             return max;
+        }
+    }
+
+    class Solution2 {
+
+        public int maxProduct(int[] nums) {
+            int result = Arrays.stream(nums).max().getAsInt();
+            int max = 1;
+            int min = 1;
+
+            for (int num : nums) {
+                int currentMax = max * num;
+                max = Math.max(currentMax, Math.max(min * num, num));
+                min = Math.min(currentMax, Math.min(min * num, num));
+                result = Math.max(max, result);
+            }
+
+            return result;
         }
     }
 }
