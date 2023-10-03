@@ -39,4 +39,25 @@ public class MinCostClimbingStairs746 {
             return Math.min(dp[0], dp[1]);
         }
     }
+
+    class Solution3 {
+
+        public int minCostClimbingStairs(int[] cost) {
+            if (cost.length == 1) {
+                return cost[0];
+            }
+
+            int dp1 = cost[cost.length - 2];
+            int dp2 = cost[cost.length - 1];
+
+            for (int i = cost.length - 3; i >= 0; i--) {
+                int newMin = Math.min(cost[i] + dp1, cost[i] + dp2);
+
+                dp2 = dp1;
+                dp1 = newMin;
+            }
+
+            return Math.min(dp1, dp2);
+        }
+    }
 }
