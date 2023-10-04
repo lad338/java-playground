@@ -58,4 +58,39 @@ public class CombinationSum39 {
             }
         }
     }
+
+    class BacktrackingSolution {
+
+        private List<List<Integer>> result = new ArrayList<>();
+
+        public List<List<Integer>> combinationSum(
+            int[] candidates,
+            int target
+        ) {
+            dfs(0, new ArrayList<>(), 0, target, candidates);
+            return result;
+        }
+
+        private void dfs(
+            int i,
+            List<Integer> cur,
+            int total,
+            int target,
+            int[] candidates
+        ) {
+            if (total == target) {
+                result.add(new ArrayList<>(cur));
+                return;
+            }
+
+            if (i >= candidates.length || total > target) {
+                return;
+            }
+
+            cur.add(candidates[i]);
+            dfs(i, cur, total + candidates[i], target, candidates);
+            cur.remove(cur.size() - 1);
+            dfs(i + 1, cur, total, target, candidates);
+        }
+    }
 }
