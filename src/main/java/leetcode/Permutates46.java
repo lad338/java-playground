@@ -43,4 +43,35 @@ public class Permutates46 {
             }
         }
     }
+
+    class Solution2 {
+
+        public List<List<Integer>> permute(int[] nums) {
+            List<Integer> list = new ArrayList<>();
+            for (int n : nums) {
+                list.add(n);
+            }
+            return permute(list);
+        }
+
+        public List<List<Integer>> permute(List<Integer> nums) {
+            List<List<Integer>> result = new ArrayList<>();
+
+            if (nums.size() == 1) {
+                return Collections.singletonList(nums);
+            }
+
+            for (int i = 0; i < nums.size(); i++) {
+                List<Integer> copy = new ArrayList<>(nums);
+                copy.remove(i);
+
+                List<List<Integer>> perms = permute(copy);
+                for (List<Integer> p : perms) {
+                    p.add(nums.get(i));
+                    result.add(p);
+                }
+            }
+            return result;
+        }
+    }
 }
