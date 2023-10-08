@@ -92,7 +92,8 @@ public class ListAvailability {
                 new Availability(new Interval(20, 40), "Ben"),
                 new Availability(new Interval(60, 70), "Clare"),
                 new Availability(new Interval(120, 180), "Don"),
-                new Availability(new Interval(30, 150), "Eddie")
+                new Availability(new Interval(30, 150), "Eddie"),
+                new Availability(new Interval(30, 100), "Ford")
             )
         );
 
