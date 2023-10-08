@@ -70,4 +70,65 @@ public class LongestIncreasingPathInMatrix329 {
             return max;
         }
     }
+
+    class Solution2 {
+
+        int[][] dp;
+
+        public int longestIncreasingPath(int[][] matrix) {
+            dp = new int[matrix.length][matrix[0].length];
+
+            int result = 1;
+            for (int i = 0; i < matrix.length; i++) {
+                for (int j = 0; j < matrix[0].length; j++) {
+                    result = Math.max(result, dfs(matrix, i, j));
+                }
+            }
+            return result;
+        }
+
+        private int dfs(int[][] matrix, int row, int col) {
+            if (
+                row < 0 ||
+                col < 0 ||
+                row >= matrix.length ||
+                col >= matrix[0].length
+            ) {
+                return 0;
+            }
+
+            if (dp[row][col] != 0) {
+                return dp[row][col];
+            }
+
+            int max = 1;
+
+            if (row - 1 >= 0) {
+                if (matrix[row - 1][col] > matrix[row][col]) {
+                    max = Math.max(max, 1 + dfs(matrix, row - 1, col));
+                }
+            }
+
+            if (row + 1 < matrix.length) {
+                if (matrix[row + 1][col] > matrix[row][col]) {
+                    max = Math.max(max, 1 + dfs(matrix, row + 1, col));
+                }
+            }
+
+            if (col - 1 >= 0 && col - 1 < matrix[0].length) {
+                if (matrix[row][col - 1] > matrix[row][col]) {
+                    max = Math.max(max, 1 + dfs(matrix, row, col - 1));
+                }
+            }
+
+            if (col + 1 < matrix[0].length) {
+                if (matrix[row][col + 1] > matrix[row][col]) {
+                    max = Math.max(max, 1 + dfs(matrix, row, col + 1));
+                }
+            }
+
+            dp[row][col] = max;
+            return max;
+        }
+    }
 }
