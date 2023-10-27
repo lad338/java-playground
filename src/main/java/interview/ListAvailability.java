@@ -2,6 +2,7 @@ package interview;
 
 import java.util.*;
 import java.util.stream.Stream;
+import leetcode.Pair;
 
 public class ListAvailability {
 
@@ -9,7 +10,7 @@ public class ListAvailability {
 
         @Override
         public String toString() {
-            return "Interval{" + "start=" + start + ", end=" + end + '}';
+            return "Interval{" + start + "," + end + '}';
         }
 
         public Integer start;
@@ -18,6 +19,25 @@ public class ListAvailability {
         public Interval(Integer start, Integer end) {
             this.start = start;
             this.end = end;
+        }
+
+        public static Interval of(Integer start, Integer end) {
+            return new Interval(start, end);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(start, end);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Interval interval)) return false;
+            return (
+                Objects.equals(start, interval.start) &&
+                Objects.equals(end, interval.end)
+            );
         }
     }
 
@@ -30,6 +50,11 @@ public class ListAvailability {
 
         public Interval interval;
         public String name;
+
+        @Override
+        public String toString() {
+            return ("Availability{" + interval + "," + name + '}');
+        }
     }
 
     public static Map<Interval, Set<String>> function(
@@ -85,18 +110,176 @@ public class ListAvailability {
         return result;
     }
 
-    public static void main(String[] args) {
-        final Map<Interval, Set<String>> result = function(
-            List.of(
-                new Availability(new Interval(10, 100), "Abby"),
-                new Availability(new Interval(20, 40), "Ben"),
-                new Availability(new Interval(60, 70), "Clare"),
-                new Availability(new Interval(120, 180), "Don"),
-                new Availability(new Interval(30, 150), "Eddie"),
-                new Availability(new Interval(30, 100), "Ford")
-            )
+    public static Map<Interval, Set<String>> functionNLogN(
+        List<Availability> availabilities
+    ) {
+        Map<Interval, Set<String>> result = new HashMap<>();
+
+        List<Availability> copied = new ArrayList<>(availabilities);
+        copied.sort(Comparator.comparingInt(it -> it.interval.start));
+
+        PriorityQueue<Pair<String, Integer>> heap = new PriorityQueue<>(
+            Comparator.comparingInt(Pair::getValue)
         );
 
-        System.out.println(result);
+        int startTime = copied.get(0).interval.start;
+
+        for (Availability current : copied) {
+            if (!current.interval.start.equals(startTime)) {
+                int endTime = current.interval.start;
+                while (heap.size() > 0 && heap.peek().getValue() < endTime) {
+                    final Pair<String, Integer> first = heap.peek();
+                    if (startTime < first.getValue()) {
+                        Set<String> names = result.getOrDefault(
+                            Interval.of(startTime, first.getValue()),
+                            new HashSet<>()
+                        );
+                        names.addAll(heap.stream().map(Pair::getKey).toList());
+                        result.put(
+                            Interval.of(startTime, first.getValue()),
+                            names
+                        );
+                        startTime = first.getValue();
+                    }
+                    heap.poll();
+                }
+
+                if (heap.size() > 0) {
+                    Set<String> names = result.getOrDefault(
+                        Interval.of(startTime, endTime),
+                        new HashSet<>()
+                    );
+                    names.addAll(heap.stream().map(Pair::getKey).toList());
+                    result.put(Interval.of(startTime, endTime), names);
+                }
+                startTime = endTime;
+            }
+            heap.add(new Pair<>(current.name, current.interval.end));
+        }
+
+        while (heap.size() > 0) {
+            final Pair<String, Integer> first = heap.peek();
+            if (startTime < first.getValue()) {
+                Set<String> names = result.getOrDefault(
+                    Interval.of(startTime, first.getValue()),
+                    new HashSet<>()
+                );
+                names.addAll(heap.stream().map(Pair::getKey).toList());
+                result.put(Interval.of(startTime, first.getValue()), names);
+            }
+            startTime = heap.poll().getValue();
+        }
+
+        return result;
+    }
+
+    public static Map<Interval, Set<String>> functionNLogNCleaner(
+        List<Availability> availabilities
+    ) {
+        Map<Interval, Set<String>> result = new HashMap<>();
+
+        final List<Integer> intervalEndPoints = availabilities
+            .stream()
+            .flatMap(it -> Stream.of(it.interval.start, it.interval.end))
+            .distinct()
+            .sorted()
+            .toList();
+
+        List<Interval> resultIntervals = new ArrayList<>();
+
+        for (int i = 0; i < intervalEndPoints.size() - 1; i++) {
+            final Interval interval = Interval.of(
+                intervalEndPoints.get(i),
+                intervalEndPoints.get(i + 1)
+            );
+            resultIntervals.add(interval);
+        }
+
+        List<Availability> copied = new ArrayList<>(availabilities);
+        copied.sort(Comparator.comparingInt(it -> it.interval.start));
+        PriorityQueue<Pair<String, Integer>> heap = new PriorityQueue<>(
+            Comparator.comparingInt(Pair::getValue)
+        );
+
+        int personIndex = 0;
+        for (Interval interval : resultIntervals) {
+            while (
+                heap.size() > 0 && heap.peek().getValue() <= interval.start
+            ) {
+                heap.poll();
+            }
+
+            while (
+                personIndex < copied.size() &&
+                copied.get(personIndex).interval.start.equals(interval.start)
+            ) {
+                heap.add(
+                    new Pair<>(
+                        copied.get(personIndex).name,
+                        copied.get(personIndex).interval.end
+                    )
+                );
+                personIndex++;
+            }
+
+            if (heap.size() > 0) {
+                result.put(
+                    interval,
+                    new HashSet<>(heap.stream().map(Pair::getKey).toList())
+                );
+            }
+        }
+
+        return result;
+    }
+
+    private static void print(Map<Interval, Set<String>> result) {
+        PriorityQueue<Pair<Interval, Set<String>>> heap = new PriorityQueue<>(
+            (a, b) -> {
+                if (a.getKey().start.equals(b.getKey().end)) {
+                    return a.getKey().end.compareTo(b.getKey().end);
+                }
+                return a.getKey().start.compareTo(b.getKey().start);
+            }
+        );
+        result.forEach((key, value) -> heap.add(new Pair<>(key, value)));
+        StringBuilder sb = new StringBuilder();
+        while (heap.size() > 0) {
+            final Pair<Interval, Set<String>> poll = heap.poll();
+            sb.append(poll.getKey());
+            sb.append("=");
+            sb.append(poll.getValue());
+            if (heap.size() > 0) {
+                sb.append(", ");
+            }
+        }
+        System.out.println(sb);
+    }
+
+    public static void main(String[] args) {
+        final List<Availability> availabilities = List.of(
+            new Availability(Interval.of(10, 100), "Abby"),
+            new Availability(Interval.of(20, 40), "Ben"),
+            new Availability(Interval.of(60, 70), "Clare"),
+            new Availability(Interval.of(120, 180), "Don"),
+            new Availability(Interval.of(30, 150), "Eddie"),
+            new Availability(Interval.of(30, 100), "Ford"),
+            new Availability(Interval.of(30, 100), "Grace"),
+            new Availability(Interval.of(210, 250), "Hugh")
+        );
+
+        final Map<Interval, Set<String>> result = function(availabilities);
+
+        final Map<Interval, Set<String>> result2 = functionNLogN(
+            availabilities
+        );
+
+        final Map<Interval, Set<String>> result3 = functionNLogNCleaner(
+            availabilities
+        );
+
+        print(result);
+        print(result2);
+        print(result3);
     }
 }
