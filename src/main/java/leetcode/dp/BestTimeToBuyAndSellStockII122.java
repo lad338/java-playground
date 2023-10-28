@@ -16,4 +16,35 @@ public class BestTimeToBuyAndSellStockII122 {
             return sell[prices.length - 1];
         }
     }
+
+    class GreedySolution {
+
+        public int maxProfit(int[] prices) {
+            int cost = prices[0];
+            int profit = 0;
+            for (int price : prices) {
+                if (price > cost) {
+                    profit += price - cost;
+                }
+                cost = price;
+            }
+            return profit;
+        }
+    }
+
+    class CostProfitSolution {
+
+        public int maxProfit(int[] prices) {
+            int cost = prices[0];
+            int profit = 0;
+            for (int price : prices) {
+                cost = Math.min(cost, price);
+                if (price > cost) {
+                    profit += price - cost;
+                    cost = price;
+                }
+            }
+            return profit;
+        }
+    }
 }
