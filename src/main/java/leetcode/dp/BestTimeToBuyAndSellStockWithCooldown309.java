@@ -30,4 +30,21 @@ public class BestTimeToBuyAndSellStockWithCooldown309 {
             return cache.get(current);
         }
     }
+
+    class CostProfitSolution {
+
+        public int maxProfit(int[] prices) {
+            int profit = 0;
+            int costBuy = prices[0];
+            int costCooldown = 0;
+
+            for (int i = 1; i < prices.length; i++) {
+                int prevProfit = -costCooldown;
+                costCooldown = costBuy - prices[i];
+                costBuy = Math.min(costBuy, prices[i] - profit);
+                profit = Math.max(profit, prevProfit);
+            }
+            return Math.max(profit, -costCooldown);
+        }
+    }
 }
