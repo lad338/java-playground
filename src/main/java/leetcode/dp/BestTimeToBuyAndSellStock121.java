@@ -30,4 +30,18 @@ public class BestTimeToBuyAndSellStock121 {
             return result;
         }
     }
+
+    class ProfitCostSolution {
+
+        public int maxProfit(int[] prices) {
+            int cost = prices[0];
+            int profit = 0;
+
+            for (int price : prices) {
+                profit = Math.max(profit, price - cost);
+                cost = Math.min(cost, price);
+            }
+            return profit;
+        }
+    }
 }
