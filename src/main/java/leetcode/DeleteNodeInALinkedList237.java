@@ -1,7 +1,5 @@
 package leetcode;
 
-import leetcode.ListNode21.*;
-
 public class DeleteNodeInALinkedList237 {
 
     class Solution {

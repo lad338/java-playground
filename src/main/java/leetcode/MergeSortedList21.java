@@ -1,7 +1,5 @@
 package leetcode;
 
-import leetcode.ListNode21.*;
-
 public class MergeSortedList21 {
 
     static class Solution {

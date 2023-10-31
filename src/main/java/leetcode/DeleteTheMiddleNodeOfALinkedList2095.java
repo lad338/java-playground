@@ -2,7 +2,6 @@ package leetcode;
 
 import java.util.HashMap;
 import java.util.Map;
-import leetcode.ListNode21.*;
 
 public class DeleteTheMiddleNodeOfALinkedList2095 {
 

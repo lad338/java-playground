@@ -1,7 +1,6 @@
 package leetcode;
 
 import java.util.*;
-import leetcode.ListNode21.*;
 
 public class MergeKSortedLists23 {
 
