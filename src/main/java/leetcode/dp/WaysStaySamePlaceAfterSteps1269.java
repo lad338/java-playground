@@ -42,4 +42,35 @@ public class WaysStaySamePlaceAfterSteps1269 {
             return sum;
         }
     }
+
+    class BottomUpSolution {
+
+        private final int mod = 1_000_000_007;
+
+        public int numWays(int steps, int arrLen) {
+            int cacheLength = Math.min(steps, arrLen);
+            int[] cache = new int[cacheLength];
+
+            cache[0] = 1;
+            for (int i = 1; i <= steps; i++) {
+                int[] updatedCache = new int[cacheLength];
+                for (int j = 0; j < cacheLength; j++) {
+                    updatedCache[j] = cache[j];
+
+                    if (j - 1 >= 0) {
+                        updatedCache[j] =
+                            (updatedCache[j] + cache[j - 1]) % mod;
+                    }
+
+                    if (j + 1 < cacheLength) {
+                        updatedCache[j] =
+                            (updatedCache[j] + cache[j + 1]) % mod;
+                    }
+                }
+                cache = updatedCache;
+            }
+
+            return cache[0];
+        }
+    }
 }
