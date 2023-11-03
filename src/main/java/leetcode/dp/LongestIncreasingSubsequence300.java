@@ -62,4 +62,34 @@ public class LongestIncreasingSubsequence300 {
             return Arrays.stream(dp).max().getAsInt();
         }
     }
+
+    class TopDownSolution {
+
+        int[] cache = new int[1];
+
+        public int lengthOfLIS(int[] nums) {
+            cache = new int[nums.length];
+            return helper(0, Integer.MIN_VALUE, nums);
+        }
+
+        private int helper(int index, int previous, int[] nums) {
+            if (index >= nums.length) {
+                return 0;
+            }
+
+            if (cache[index] != 0) {
+                return cache[index];
+            }
+
+            int max = 0;
+            for (int i = index; i < nums.length; i++) {
+                if (previous < nums[i]) {
+                    max = Math.max(max, 1 + helper(i + 1, nums[i], nums));
+                }
+            }
+
+            cache[index] = max;
+            return max;
+        }
+    }
 }
