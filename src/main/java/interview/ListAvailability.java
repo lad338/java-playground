@@ -1,6 +1,7 @@
 package interview;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import leetcode.Pair;
 
@@ -204,12 +205,6 @@ public class ListAvailability {
         int personIndex = 0;
         for (Interval interval : resultIntervals) {
             while (
-                heap.size() > 0 && heap.peek().getValue() <= interval.start
-            ) {
-                heap.poll();
-            }
-
-            while (
                 personIndex < copied.size() &&
                 copied.get(personIndex).interval.start.equals(interval.start)
             ) {
@@ -222,11 +217,71 @@ public class ListAvailability {
                 personIndex++;
             }
 
+            while (
+                heap.size() > 0 && heap.peek().getValue() <= interval.start
+            ) {
+                heap.poll();
+            }
+
             if (heap.size() > 0) {
                 result.put(
                     interval,
                     new HashSet<>(heap.stream().map(Pair::getKey).toList())
                 );
+            }
+        }
+
+        return result;
+    }
+
+    public static Map<Interval, Set<String>> nLogNShort(
+        List<Availability> availabilities
+    ) {
+        Map<Interval, Set<String>> result = new HashMap<>();
+        PriorityQueue<Availability> heap = new PriorityQueue<>(
+            Comparator.comparingInt(it -> it.interval.end)
+        );
+
+        availabilities =
+            availabilities
+                .stream()
+                .sorted(Comparator.comparingInt(it -> it.interval.start))
+                .toList();
+
+        final List<Integer> ends = availabilities
+            .stream()
+            .flatMap(it -> Stream.of(it.interval.start, it.interval.end))
+            .distinct()
+            .sorted()
+            .toList();
+        final List<Interval> resultIntervals = new ArrayList<>();
+        for (int i = 0; i < ends.size() - 1; i++) {
+            resultIntervals.add(Interval.of(ends.get(i), ends.get(i + 1)));
+        }
+
+        int availabilityIndex = 0;
+        for (Interval interval : resultIntervals) {
+            while (
+                availabilityIndex < availabilities.size() &&
+                availabilities
+                    .get(availabilityIndex)
+                    .interval.start.equals(interval.start)
+            ) {
+                heap.add(availabilities.get(availabilityIndex));
+                availabilityIndex++;
+            }
+            while (
+                !heap.isEmpty() && heap.peek().interval.end <= interval.start
+            ) {
+                heap.poll();
+            }
+
+            if (!heap.isEmpty()) {
+                Set<String> names = heap
+                    .stream()
+                    .map(it -> it.name)
+                    .collect(Collectors.toSet());
+                result.put(interval, names);
             }
         }
 
@@ -265,7 +320,8 @@ public class ListAvailability {
             new Availability(Interval.of(30, 150), "Eddie"),
             new Availability(Interval.of(30, 100), "Ford"),
             new Availability(Interval.of(30, 100), "Grace"),
-            new Availability(Interval.of(210, 250), "Hugh")
+            new Availability(Interval.of(210, 250), "Hugh"),
+            new Availability(Interval.of(40, 40), "Irene")
         );
 
         final Map<Interval, Set<String>> result = function(availabilities);
@@ -278,8 +334,11 @@ public class ListAvailability {
             availabilities
         );
 
+        final Map<Interval, Set<String>> result4 = nLogNShort(availabilities);
+
         print(result);
         print(result2);
         print(result3);
+        print(result4);
     }
 }
