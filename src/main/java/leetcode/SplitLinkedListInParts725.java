@@ -54,4 +54,51 @@ public class SplitLinkedListInParts725 {
             return result;
         }
     }
+
+    /**
+     * Definition for singly-linked list.
+     * public class ListNode {
+     *     int val;
+     *     ListNode next;
+     *     ListNode() {}
+     *     ListNode(int val) { this.val = val; }
+     *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+     * }
+     */
+    class CountingSolution {
+
+        public ListNode[] splitListToParts(ListNode head, int k) {
+            int length = 0;
+
+            ListNode current = head;
+            while (current != null) {
+                current = current.next;
+                length++;
+            }
+
+            int splitLength = length / k;
+            int remainder = length % k;
+
+            ListNode[] result = new ListNode[k];
+            result[0] = head;
+
+            for (int i = 0; i < k - 1; i++) {
+                current = result[i];
+                int count = 1;
+                while (
+                    current != null &&
+                    count < splitLength + ((remainder - 1 >= i) ? 1 : 0)
+                ) {
+                    count++;
+                    current = current.next;
+                }
+                if (current != null) {
+                    result[i + 1] = current.next;
+                    current.next = null;
+                }
+            }
+
+            return result;
+        }
+    }
 }
