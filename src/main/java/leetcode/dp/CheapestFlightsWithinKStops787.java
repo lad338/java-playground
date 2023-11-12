@@ -29,13 +29,12 @@ public class CheapestFlightsWithinKStops787 {
                 adjMap.put(source, sourceMap);
             }
 
-            Deque<Pair<Integer, Integer>> queue = new ArrayDeque<>();
-            queue.addAll(
+            Deque<Pair<Integer, Integer>> queue = new ArrayDeque<>(
                 adjMap
                     .getOrDefault(src, new HashMap<>())
                     .keySet()
                     .stream()
-                    .map(it -> new Pair<Integer, Integer>(src, it))
+                    .map(it -> new Pair<>(src, it))
                     .toList()
             );
 
