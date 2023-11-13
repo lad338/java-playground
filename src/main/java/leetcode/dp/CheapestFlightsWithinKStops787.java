@@ -85,4 +85,43 @@ public class CheapestFlightsWithinKStops787 {
             return costCache[dst] == 0 ? -1 : costCache[dst];
         }
     }
+
+    class NeetCodeSolution {
+
+        public int findCheapestPrice(
+            int n,
+            int[][] flights,
+            int src,
+            int dst,
+            int k
+        ) {
+            int[] costCache = new int[n];
+            Arrays.fill(costCache, Integer.MAX_VALUE);
+            costCache[src] = 0;
+
+            for (int i = 0; i <= k; i++) {
+                int[] currentCostCache = Arrays.copyOf(
+                    costCache,
+                    costCache.length
+                );
+
+                for (int[] flight : flights) {
+                    int source = flight[0];
+                    int destination = flight[1];
+                    int cost = flight[2];
+
+                    if (costCache[source] != Integer.MAX_VALUE) {
+                        currentCostCache[destination] =
+                            Math.min(
+                                currentCostCache[destination],
+                                costCache[source] + cost
+                            );
+                    }
+                }
+                costCache = currentCostCache;
+            }
+
+            return costCache[dst] == Integer.MAX_VALUE ? -1 : costCache[dst];
+        }
+    }
 }
