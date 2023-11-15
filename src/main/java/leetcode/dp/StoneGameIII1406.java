@@ -60,4 +60,50 @@ public class StoneGameIII1406 {
             return result;
         }
     }
+
+    class NeetCodeSolution {
+
+        int[] stoneValue;
+        int[] cache;
+
+        public String stoneGameIII(int[] stoneValue) {
+            this.stoneValue = stoneValue;
+            this.cache = new int[stoneValue.length];
+            Arrays.fill(cache, Integer.MIN_VALUE);
+            int result = helper(0);
+
+            if (result > 0) {
+                return "Alice";
+            } else if (result < 0) {
+                return "Bob";
+            } else {
+                return "Tie";
+            }
+        }
+
+        private int helper(int index) {
+            if (index == stoneValue.length) {
+                return 0;
+            }
+
+            if (cache[index] != Integer.MIN_VALUE) {
+                return cache[index];
+            }
+
+            int subTotal = 0;
+            int result = Integer.MIN_VALUE;
+
+            for (int i = 0; i < 3; i++) {
+                if (index + i >= stoneValue.length) {
+                    break;
+                }
+                subTotal += stoneValue[i + index];
+                result = Math.max(result, subTotal - helper(i + index + 1));
+            }
+
+            cache[index] = result;
+
+            return result;
+        }
+    }
 }
