@@ -155,4 +155,51 @@ public class MedianOf2SortedArrays4 {
             );
         }
     }
+
+    class NeetcodeSolution {
+
+        public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+            if (nums1.length > nums2.length) {
+                return findMedianSortedArrays(nums2, nums1);
+            }
+
+            int fullLength = nums1.length + nums2.length;
+            int halfLength = fullLength / 2;
+
+            int L = 0;
+            int R = nums1.length - 1;
+            while (true) {
+                int M1 = (int) Math.floor((L + (R - L) / 2.0f));
+                int M2 = halfLength - M1 - 2;
+
+                int left1 = M1 >= 0 ? nums1[M1] : Integer.MIN_VALUE;
+                int right1 = M1 + 1 < nums1.length
+                    ? nums1[M1 + 1]
+                    : Integer.MAX_VALUE;
+
+                int left2 = M2 >= 0 ? nums2[M2] : Integer.MIN_VALUE;
+                int right2 = M2 + 1 < nums2.length
+                    ? nums2[M2 + 1]
+                    : Integer.MAX_VALUE;
+
+                if (right2 >= left1 && right1 >= left2) {
+                    if (fullLength % 2 == 1) {
+                        return Math.min(right1, right2);
+                    } else {
+                        return (
+                            (
+                                Math.min(right1, right2) +
+                                Math.max(left1, left2)
+                            ) /
+                            2.0f
+                        );
+                    }
+                } else if (right2 < left1) {
+                    R = M1 - 1;
+                } else {
+                    L = M1 + 1;
+                }
+            }
+        }
+    }
 }
