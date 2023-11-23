@@ -1,4 +1,4 @@
-package leetcode;
+package leetcode.slidingWindow;
 
 public class MaximumAverageSubarrayI643 {
 
