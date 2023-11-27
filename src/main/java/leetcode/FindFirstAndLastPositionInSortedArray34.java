@@ -114,4 +114,46 @@ public class FindFirstAndLastPositionInSortedArray34 {
             return new int[] { resultA, resultB };
         }
     }
+
+    class CleanerSolution {
+
+        public int[] searchRange(int[] nums, int target) {
+            int[] result = new int[2];
+            result[0] = -1;
+            result[1] = -1;
+
+            int L = 0;
+            int R = nums.length - 1;
+
+            while (L <= R) {
+                int M = L + (R - L) / 2;
+
+                if (nums[M] == target) {
+                    result[0] = M;
+                    R = M - 1;
+                } else if (nums[M] < target) {
+                    L = M + 1;
+                } else {
+                    R = M - 1;
+                }
+            }
+
+            L = 0;
+            R = nums.length - 1;
+            while (L <= R) {
+                int M = L + (R - L) / 2;
+
+                if (nums[M] == target) {
+                    result[1] = M;
+                    L = M + 1;
+                } else if (nums[M] < target) {
+                    L = M + 1;
+                } else {
+                    R = M - 1;
+                }
+            }
+
+            return result;
+        }
+    }
 }
