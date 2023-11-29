@@ -72,4 +72,42 @@ public class HouseRobber198 {
             return rob2;
         }
     }
+
+    class RecursiveSolution {
+
+        int[] nums;
+        int[] cache;
+
+        public int rob(int[] nums) {
+            this.nums = nums;
+            this.cache = new int[nums.length];
+            for (int i = 0; i < nums.length; i++) {
+                cache[i] = -1;
+            }
+
+            return helper(0);
+        }
+
+        private int helper(int index) {
+            if (index >= nums.length) {
+                return 0;
+            }
+
+            if (cache[index] != -1) {
+                return cache[index];
+            }
+
+            int result = helper(index + 1);
+
+            if (index + 2 <= nums.length) {
+                result = Math.max(result, nums[index] + helper(index + 2));
+            } else {
+                result = Math.max(result, nums[index]);
+            }
+
+            cache[index] = result;
+
+            return result;
+        }
+    }
 }
