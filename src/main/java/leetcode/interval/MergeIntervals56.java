@@ -1,4 +1,4 @@
-package leetcode;
+package leetcode.interval;
 
 import java.util.*;
 import java.util.Collections.*;
@@ -86,6 +86,32 @@ public class MergeIntervals56 {
 
                 return results.toArray(new int[results.size()][2]);
             }
+        }
+    }
+
+    class CleanerSolution {
+
+        public int[][] merge(int[][] intervals) {
+            if (intervals.length == 1) {
+                return intervals;
+            }
+
+            Arrays.sort(intervals, Comparator.comparingInt(it -> it[0]));
+
+            int[] merge = new int[] { intervals[0][0], intervals[0][1] };
+            List<int[]> results = new ArrayList<>();
+
+            for (int[] interval : intervals) {
+                if (interval[0] > merge[1]) {
+                    results.add(merge);
+                    merge = new int[] { interval[0], interval[1] };
+                }
+                merge[0] = Math.min(merge[0], interval[0]);
+                merge[1] = Math.max(merge[1], interval[1]);
+            }
+            results.add(merge);
+
+            return results.toArray(new int[results.size()][2]);
         }
     }
 }
