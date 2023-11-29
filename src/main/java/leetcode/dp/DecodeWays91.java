@@ -1,5 +1,7 @@
 package leetcode.dp;
 
+import java.util.Arrays;
+
 public class DecodeWays91 {
 
     class TLESolution {
@@ -55,6 +57,54 @@ public class DecodeWays91 {
             }
 
             return dp[s.length()];
+        }
+    }
+
+    class RecursiveSolution {
+
+        String s;
+        int[] cache;
+
+        public int numDecodings(String s) {
+            this.s = s;
+            cache = new int[s.length()];
+            Arrays.fill(cache, -1);
+
+            return helper(0);
+        }
+
+        private int helper(int index) {
+            if (index == s.length()) {
+                return 1;
+            }
+
+            if (cache[index] != -1) {
+                return cache[index];
+            }
+
+            int ways = 0;
+
+            int take1 = s.charAt(index) == '0' ? 0 : helper(index + 1);
+            int take2 = index == s.length() - 1
+                ? 0
+                : (
+                    (
+                            s.charAt(index) == '1' ||
+                            (
+                                s.charAt(index) == '2' &&
+                                s.charAt(index + 1) >= '0' &&
+                                s.charAt(index + 1) <= '6'
+                            )
+                        )
+                        ? helper(index + 2)
+                        : 0
+                );
+
+            ways += take1;
+            ways += take2;
+
+            cache[index] = ways;
+            return ways;
         }
     }
 }
