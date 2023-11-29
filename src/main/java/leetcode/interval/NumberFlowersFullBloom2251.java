@@ -1,4 +1,4 @@
-package leetcode;
+package leetcode.interval;
 
 import java.util.*;
 
