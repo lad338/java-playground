@@ -26,4 +26,32 @@ public class TopKFrequentElements347 {
                 .toArray();
         }
     }
+
+    class ONSolution {
+
+        public int[] topKFrequent(int[] nums, int k) {
+            Map<Integer, Integer> numToCount = new HashMap<>();
+            Map<Integer, Set<Integer>> countToNum = new HashMap<>();
+            int maxCount = 0;
+
+            for (int num : nums) {
+                numToCount.put(num, numToCount.getOrDefault(num, 0) + 1);
+            }
+
+            for (int num : numToCount.keySet()) {
+                int count = numToCount.get(num);
+                countToNum.putIfAbsent(count, new HashSet<>());
+                countToNum.get(count).add(num);
+                maxCount = Math.max(maxCount, count);
+            }
+
+            List<Integer> list = new ArrayList<>();
+            for (int i = maxCount; i >= 1 && list.size() < k; i--) {
+                if (countToNum.containsKey(i)) {
+                    list.addAll(countToNum.get(i));
+                }
+            }
+            return list.stream().mapToInt(Integer::intValue).toArray();
+        }
+    }
 }
