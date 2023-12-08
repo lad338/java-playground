@@ -1,10 +1,8 @@
 package interview;
 
-import static interview.PizzaPriceCalculator.PriceCalculator.Base.GLUTEN_FREE;
-import static interview.PizzaPriceCalculator.PriceCalculator.Base.NORMAL;
+import static interview.PizzaPriceCalculator.PriceCalculator.Base.*;
 import static interview.PizzaPriceCalculator.PriceCalculator.Size.*;
-import static interview.PizzaPriceCalculator.PriceCalculator.Topping.MUSHROOM;
-import static interview.PizzaPriceCalculator.PriceCalculator.Topping.PEPPERONI;
+import static interview.PizzaPriceCalculator.PriceCalculator.Topping.*;
 
 import java.util.*;
 
