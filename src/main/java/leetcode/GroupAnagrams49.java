@@ -44,4 +44,28 @@ public class GroupAnagrams49 {
             return results;
         }
     }
+
+    class Solution2 {
+
+        public List<List<String>> groupAnagrams(String[] strs) {
+            Map<Map<Character, Integer>, List<String>> map = new HashMap<>();
+
+            for (String str : strs) {
+                Map<Character, Integer> countMap = new HashMap<>();
+                char[] charArray = str.toCharArray();
+                for (char c : charArray) {
+                    countMap.put(c, countMap.getOrDefault(c, 0) + 1);
+                }
+                map.putIfAbsent(countMap, new ArrayList<>());
+                map.get(countMap).add(str);
+            }
+
+            List<List<String>> result = new ArrayList<>();
+            for (Map<Character, Integer> key : map.keySet()) {
+                result.add(map.get(key));
+            }
+
+            return result;
+        }
+    }
 }
