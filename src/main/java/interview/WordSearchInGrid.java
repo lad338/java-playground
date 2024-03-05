@@ -56,20 +56,19 @@ public class WordSearchInGrid {
         int c,
         boolean[][] visited
     ) {
-        if (r >= 4 || c >= 4 || r < 0 || c < 0) { // 4 -> length of gird
+        if (
+            r >= grid.length ||
+            c >= grid[0].length ||
+            r < 0 ||
+            c < 0 ||
+            visited[r][c] ||
+            grid[r][c] != word.charAt(0)
+        ) {
             return false;
         }
 
-        if (word.length() == 1) {
-            if (grid[r][c] == word.charAt(0) && !visited[r][c]) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        if (grid[r][c] != word.charAt(0) || visited[r][c]) {
-            return false;
+        if (word.length() == 1 && grid[r][c] == word.charAt(0)) {
+            return true;
         }
 
         String wordLeft = word.substring(1);
